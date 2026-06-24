@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "https://resume-forge-4lsw.onrender.com/api/:path*" },
+    { "source": "/pdf/:path*", "destination": "https://resume-forge-4lsw.onrender.com/pdf/:path*" },
+    { "source": "/openapi.json", "destination": "https://resume-forge-4lsw.onrender.com/openapi.json" },
+    { "source": "/.well-known/:path*", "destination": "https://resume-forge-4lsw.onrender.com/.well-known/:path*" },
+    { "source": "/:path*", "destination": "/index.html" }
+  ]
+}
