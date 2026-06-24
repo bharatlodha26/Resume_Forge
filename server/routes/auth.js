@@ -61,7 +61,8 @@ router.get('/authorize', (req, res) => {
   }
 
   // Forward to the React login page with all OAuth params preserved
-  const loginUrl = new URL('http://localhost:5173/login');
+  const frontendBase = process.env.FRONTEND_URL || 'http://localhost:5173';
+  const loginUrl = new URL(`${frontendBase}/login`);
   loginUrl.searchParams.set('client_id', client_id);
   loginUrl.searchParams.set('redirect_uri', redirect_uri);
   loginUrl.searchParams.set('state', state || '');

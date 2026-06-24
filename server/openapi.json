@@ -6,7 +6,7 @@
     "version": "2.0.0"
   },
   "servers": [
-    { "url": "http://localhost:3001", "description": "Local development" }
+    { "url": "https://resume-forge-4lsw.onrender.com", "description": "Production server" }
   ],
   "security": [
     { "BearerAuth": [] }
@@ -17,8 +17,8 @@
         "type": "oauth2",
         "flows": {
           "authorizationCode": {
-            "authorizationUrl": "http://localhost:3001/api/auth/authorize",
-            "tokenUrl": "http://localhost:3001/api/auth/token",
+            "authorizationUrl": "https://resume-forge-4lsw.onrender.com/api/auth/authorize",
+            "tokenUrl": "https://resume-forge-4lsw.onrender.com/api/auth/token",
             "scopes": {
               "resume:read": "Read master resume",
               "resume:write": "Write master resume",
