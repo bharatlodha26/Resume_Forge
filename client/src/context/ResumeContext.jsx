@@ -23,12 +23,22 @@ export function ResumeProvider({ children }) {
     const res = await fetch(url, { ...options, headers });
     if (res.status === 401) {
       localStorage.removeItem('token');
-      window.location.href = '/login';
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login';
+      }
     }
     return res;
   };
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    const isLoginPath = window.location.pathname === '/login';
+    
+    if (!token || isLoginPath) {
+      setLoading(false);
+      return;
+    }
+
     const API_BASE = import.meta.env.VITE_API_URL || '';
     authFetch(`${API_BASE}/api/resume`)
       .then(async r => {

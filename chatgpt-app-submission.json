@@ -3,8 +3,8 @@
   "schema_version": 1,
   "app_info": {
     "display_name": "ResumeForge",
-    "subtitle": "Professional LaTeX Resumes",
-    "description": "Create, customize, compile, and email professional, ATS-optimized LaTeX resumes. Connects securely to your ResumeForge account to manage your master resume data, instantly preview beautifully rendered templates, and send copies directly to your inbox.",
+    "subtitle": "LaTeX Resume Builder",
+    "description": "Create, update, compile, and email professional LaTeX resumes from ChatGPT. ResumeForge connects to a user's account, retrieves their master resume JSON, saves confirmed edits, generates polished PDF resumes from structured data, and can email the finished PDF to the user's inbox.",
     "category": "PRODUCTIVITY"
   },
   "tools": {
@@ -15,8 +15,8 @@
         "destructiveHint": false
       },
       "justifications": {
-        "read_only_justification": "This tool is read-only because it simply fetches the stored master resume data from the user's database record without mutating any server state.",
-        "open_world_justification": "This tool is not open world because it does not communicate with external systems or network targets; it only queries the local ResumeForge database.",
+        "read_only_justification": "This tool is read-only because it only retrieves the authenticated user's stored master resume JSON and does not modify backend state.",
+        "open_world_justification": "This tool is not open world because it only reads data from ResumeForge's own backend for the authenticated user and does not contact third-party services.",
         "destructive_justification": "This tool is not destructive because it does not perform any update, deletion, or overwrite operations on any user data."
       }
     },
@@ -27,9 +27,9 @@
         "destructiveHint": false
       },
       "justifications": {
-        "read_only_justification": "This tool is not read-only because it updates and overwrites the user's master resume JSON data stored in the database.",
-        "open_world_justification": "This tool is not open world because it only saves data to the local ResumeForge database and does not connect to external network services.",
-        "destructive_justification": "This tool is not destructive because it does not delete user accounts, reset data, or destroy system state, although it performs updates."
+        "read_only_justification": "This tool is not read-only because it replaces the authenticated user's stored master resume JSON after validation.",
+        "open_world_justification": "This tool is not open world because it writes only to ResumeForge's own backend storage and does not send data to external third-party services.",
+        "destructive_justification": "This tool is not destructive because it updates one user-owned resume document rather than deleting accounts, wiping history, or removing unrelated data."
       }
     },
     "generate_pdf": {
@@ -39,9 +39,9 @@
         "destructiveHint": false
       },
       "justifications": {
-        "read_only_justification": "This tool is not read-only because it runs a compilation task on the server that generates new temporary files (PDFs) on the disk.",
-        "open_world_justification": "This tool is not open world because all LaTeX compilation and PDF rendering are completed locally on our server without accessing any external APIs or third-party web services.",
-        "destructive_justification": "This tool is not destructive because it generates new preview PDFs and does not overwrite, delete, or modify any user database records."
+        "read_only_justification": "This tool is not read-only because it performs a server-side PDF compilation job and creates a new output file.",
+        "open_world_justification": "This tool is not open world because compilation happens entirely inside ResumeForge's own infrastructure without calling external APIs or third-party services.",
+        "destructive_justification": "This tool is not destructive because it generates a new PDF artifact and does not delete or overwrite the user's stored resume by itself."
       }
     },
     "email_resume": {
@@ -51,8 +51,8 @@
         "destructiveHint": false
       },
       "justifications": {
-        "read_only_justification": "This tool is not read-only because it triggers an outgoing operation (sending an email via SMTP) rather than just reading data.",
-        "open_world_justification": "This tool is open world because it sends an email message to the user's external email address, routing traffic over the public internet to third-party mail servers.",
+        "read_only_justification": "This tool is not read-only because it initiates an outbound email delivery action instead of only returning stored data.",
+        "open_world_justification": "This tool is open world because it sends a message to an external email destination over SMTP infrastructure outside the current ChatGPT session.",
         "destructive_justification": "This tool is not destructive because it only transmits an email message and does not delete or overwrite any user records or system data."
       }
     },
@@ -64,7 +64,7 @@
       },
       "justifications": {
         "read_only_justification": "This tool is read-only because it returns a static list of supported resume templates and their metadata.",
-        "open_world_justification": "This tool is not open world because it reads template metadata from local static configuration and does not access external network targets.",
+        "open_world_justification": "This tool is not open world because it returns template metadata from ResumeForge's own backend and does not reach external third-party systems.",
         "destructive_justification": "This tool is not destructive because it is a read-only metadata retrieval and does not modify any state or database entries."
       }
     }
@@ -80,25 +80,25 @@
       "description": "Verify that the assistant can successfully retrieve the authenticated user's master resume.",
       "user_prompt": "Load my master resume details.",
       "tools_triggered": "get_master_resume",
-      "expected_output": "Should display the user's name, contact details, work experience, and educational background from the master resume."
+      "expected_output": "Should return the authenticated user's stored resume JSON, including header fields and section data if a master resume already exists."
     },
     {
-      "description": "Verify that the assistant can update the master resume with new work experience information.",
-      "user_prompt": "Add a new work experience entry to my resume: Lead Software Engineer at Google from May 2024 to Present.",
-      "tools_triggered": "save_master_resume",
-      "expected_output": "Should confirm that the master resume has been updated and saved successfully."
+      "description": "Verify that the assistant can save a validated change to the master resume after the user requests an edit.",
+      "user_prompt": "Update my master resume by adding a new bullet under my most recent role: Improved PDF generation reliability and reduced compile failures.",
+      "tools_triggered": "get_master_resume, save_master_resume",
+      "expected_output": "Should retrieve the current resume, apply the requested edit in structured JSON, save it successfully, and confirm that the master resume was updated."
     },
     {
-      "description": "Verify that the assistant can generate a compiled PDF preview from the master resume data.",
-      "user_prompt": "Compile my resume to a PDF using the executive template.",
-      "tools_triggered": "generate_pdf",
-      "expected_output": "Should return a download link for the compiled PDF file."
+      "description": "Verify that the assistant can compile a PDF from resume JSON using the supported template.",
+      "user_prompt": "Generate a PDF of my current resume using the executive template.",
+      "tools_triggered": "get_master_resume, generate_pdf",
+      "expected_output": "Should retrieve the current resume and return a successful PDF generation result containing a relative PDF URL such as /pdf/<job-id>/main.pdf."
     },
     {
-      "description": "Verify that the assistant can send the compiled PDF to the user's registered email address.",
-      "user_prompt": "Send the generated PDF /pdf/job-123/main.pdf to my email.",
+      "description": "Verify that the assistant can email the PDF that was just generated to the user's registered email address.",
+      "user_prompt": "Email the PDF you just generated to my account email.",
       "tools_triggered": "email_resume",
-      "expected_output": "Should confirm that the resume has been successfully sent to the user's inbox."
+      "expected_output": "Should send the generated PDF URL to the authenticated user's email address and confirm successful delivery or provide the development preview URL if the app is using a test SMTP account."
     }
   ],
   "negative_test_cases": [
@@ -110,12 +110,12 @@
     {
       "description": "Verify that saving the master resume fails when the payload has an invalid structure that violates the JSON Schema.",
       "user_prompt": "Update my master resume but set the header to null.",
-      "expected_output": "Should display validation errors and refuse to overwrite the master resume data."
+      "expected_output": "Should refuse to save the change, surface a schema validation error, and leave the existing master resume unchanged."
     },
     {
-      "description": "Verify that emailing the resume fails when the PDF URL is invalid, empty, or not found on the server.",
-      "user_prompt": "Email the resume /pdf/non-existent-id/main.pdf.",
-      "expected_output": "Should display a descriptive error message indicating that the PDF file was not found or could not be sent."
+      "description": "Verify that the assistant does not attempt to email a resume before it has a PDF URL to send.",
+      "user_prompt": "Email my resume to me.",
+      "expected_output": "Should ask the user to generate a PDF first or otherwise obtain a valid PDF URL before attempting the email action."
     }
   ]
 }
