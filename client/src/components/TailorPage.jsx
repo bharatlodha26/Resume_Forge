@@ -80,9 +80,13 @@ export default function TailorPage() {
     setSelectedIds(null);
     try {
       const API_BASE = import.meta.env.VITE_API_URL || '';
+      const token = localStorage.getItem('token');
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
       const res = await fetch(`${API_BASE}/api/tailor`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({ resume, jd, apiKey: apiKey || undefined })
       });
       const data = await res.json();

@@ -15,11 +15,28 @@ export function ResumeProvider({ children }) {
   const [loadingClassFile, setLoadingClassFile] = useState(false);
   const [savingClassFile, setSavingClassFile] = useState(false);
 
+  const authFetch = async (url, options = {}) => {
+    const token = localStorage.getItem('token');
+    const headers = { ...options.headers };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    
+    const res = await fetch(url, { ...options, headers });
+    if (res.status === 401) {
+      localStorage.removeItem('token');
+      window.location.href = '/login';
+    }
+    return res;
+  };
+
   useEffect(() => {
     const API_BASE = import.meta.env.VITE_API_URL || '';
-    fetch(`${API_BASE}/api/resume`)
-      .then(r => r.json())
-      .then(data => { setResume(data); setLoading(false); })
+    authFetch(`${API_BASE}/api/resume`)
+      .then(async r => {
+        if (!r.ok) throw new Error();
+        const data = await r.json();
+        setResume(data);
+        setLoading(false);
+      })
       .catch(() => setLoading(false));
   }, []);
 
@@ -27,7 +44,7 @@ export function ResumeProvider({ children }) {
     setSaving(true);
     try {
       const API_BASE = import.meta.env.VITE_API_URL || '';
-      await fetch(`${API_BASE}/api/resume`, {
+      await authFetch(`${API_BASE}/api/resume`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
@@ -52,7 +69,7 @@ export function ResumeProvider({ children }) {
     setPdfUrl(null);
     try {
       const API_BASE = import.meta.env.VITE_API_URL || '';
-      const res = await fetch(`${API_BASE}/api/compile`, {
+      const res = await authFetch(`${API_BASE}/api/compile`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ resume: resumeData || resume })
@@ -74,7 +91,7 @@ export function ResumeProvider({ children }) {
     setLoadingClassFile(true);
     try {
       const API_BASE = import.meta.env.VITE_API_URL || '';
-      const res = await fetch(`${API_BASE}/api/resume/class`);
+      const res = await fetch(`${API_BASE}/api/resume/class`); // class is public, no authFetch needed
       const data = await res.json();
       setClassFileContent(data.content || '');
     } catch (err) {
@@ -88,7 +105,7 @@ export function ResumeProvider({ children }) {
     setSavingClassFile(true);
     try {
       const API_BASE = import.meta.env.VITE_API_URL || '';
-      const res = await fetch(`${API_BASE}/api/resume/class`, {
+      const res = await authFetch(`${API_BASE}/api/resume/class`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ content })

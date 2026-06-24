@@ -50,10 +50,23 @@ export default function LoginPage() {
         window.location.href = data.redirectUrl;
       } else {
         // Direct access (testing without ChatGPT)
-        setSuccess(mode === 'signup'
-          ? '✓ Account created! You can now use ResumeForge.'
-          : '✓ Logged in successfully!'
-        );
+        const tokenRes = await fetch(`${API_BASE}/api/auth/token`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            grant_type: 'authorization_code',
+            code: data.code,
+            client_id: 'resumeforge-gpt',
+            client_secret: 'change-me-in-prod'
+          })
+        });
+        const tokenData = await tokenRes.json();
+        if (tokenRes.ok && tokenData.access_token) {
+          localStorage.setItem('token', tokenData.access_token);
+          window.location.href = '/'; // redirect to main app
+        } else {
+          setError(tokenData.error || 'Failed to exchange token');
+        }
       }
     } catch (err) {
       setError('Network error: ' + err.message);
