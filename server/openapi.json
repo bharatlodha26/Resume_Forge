@@ -1,0 +1,243 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "ResumeForge API",
+    "description": "Backend API for the ResumeForge ChatGPT Action. Handles master resume storage, PDF generation, and email delivery. All intelligence (tailoring, gap detection, schema normalization) lives inside ChatGPT.",
+    "version": "2.0.0"
+  },
+  "servers": [
+    { "url": "http://localhost:3001", "description": "Local development" }
+  ],
+  "security": [
+    { "BearerAuth": [] }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "http://localhost:3001/api/auth/authorize",
+            "tokenUrl": "http://localhost:3001/api/auth/token",
+            "scopes": {
+              "resume:read": "Read master resume",
+              "resume:write": "Write master resume",
+              "pdf:generate": "Generate PDFs",
+              "email:send": "Send email"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Header": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name":     { "type": "string", "description": "Full name" },
+          "email":    { "type": "string", "description": "Email address" },
+          "phone":    { "type": "string", "description": "Phone number" },
+          "location": { "type": "string", "description": "City, Country" },
+          "linkedin": { "type": "string", "description": "LinkedIn profile URL" },
+          "website":  { "type": "string", "description": "Personal website URL" }
+        }
+      },
+      "Bullet": {
+        "type": "object",
+        "required": ["id", "text"],
+        "properties": {
+          "id":   { "type": "string" },
+          "text": { "type": "string" }
+        }
+      },
+      "Group": {
+        "type": "object",
+        "required": ["id", "label", "bullets"],
+        "properties": {
+          "id":      { "type": "string" },
+          "label":   { "type": "string" },
+          "bullets": { "type": "array", "items": { "$ref": "#/components/schemas/Bullet" } }
+        }
+      },
+      "Job": {
+        "type": "object",
+        "required": ["id", "company", "role", "duration", "groups"],
+        "properties": {
+          "id":       { "type": "string" },
+          "company":  { "type": "string" },
+          "role":     { "type": "string" },
+          "duration": { "type": "string" },
+          "groups":   { "type": "array", "items": { "$ref": "#/components/schemas/Group" } }
+        }
+      },
+      "Resume": {
+        "type": "object",
+        "required": ["header", "sections"],
+        "properties": {
+          "header":   { "$ref": "#/components/schemas/Header" },
+          "sections": {
+            "type": "array",
+            "description": "Array of resume sections. Each section has a type: 'work', 'academic', or 'simple'.",
+            "items": {
+              "type": "object",
+              "required": ["id", "type", "title"],
+              "properties": {
+                "id":    { "type": "string" },
+                "type":  { "type": "string", "enum": ["work", "academic", "simple"] },
+                "title": { "type": "string" },
+                "jobs":  { "type": "array", "items": { "$ref": "#/components/schemas/Job" } },
+                "rows":  { "type": "array", "items": { "type": "object" } },
+                "bullets": { "type": "array", "items": { "$ref": "#/components/schemas/Bullet" } },
+                "achievements": { "type": "string" },
+                "label": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error":   { "type": "string" },
+          "details": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/resume/master": {
+      "get": {
+        "operationId": "getMasterResume",
+        "summary": "Get the user's master resume",
+        "description": "Returns the full master resume JSON for the authenticated user.",
+        "tags": ["Resume"],
+        "responses": {
+          "200": {
+            "description": "Master resume JSON",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Resume" } } }
+          },
+          "404": { "description": "No master resume exists yet for this user" }
+        }
+      },
+      "put": {
+        "operationId": "saveMasterResume",
+        "summary": "Save (replace) the user's master resume",
+        "description": "Validates the payload against the strict JSON Schema and persists it. Use this after ChatGPT has normalized the resume and the user has confirmed.",
+        "tags": ["Resume"],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Resume" } } }
+        },
+        "responses": {
+          "200": { "description": "Saved successfully" },
+          "400": { "description": "Schema validation error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } }
+        }
+      }
+    },
+    "/api/resume/generate-pdf": {
+      "post": {
+        "operationId": "generatePdf",
+        "summary": "Compile a resume JSON into a PDF",
+        "description": "Stateless endpoint. Pass any resume JSON (master or tailored) and receive a PDF URL. No resume is stored on the backend. The PDF URL expires after 24 hours.",
+        "tags": ["PDF"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["resume_json"],
+                "properties": {
+                  "resume_json": { "$ref": "#/components/schemas/Resume" },
+                  "template":   { "type": "string", "enum": ["executive"], "default": "executive" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PDF generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "pdfUrl":  { "type": "string", "description": "Relative URL to the generated PDF" },
+                    "jobId":   { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "500": { "description": "LaTeX compilation error" }
+        }
+      }
+    },
+    "/api/resume/email": {
+      "post": {
+        "operationId": "emailResume",
+        "summary": "Email the PDF to the user",
+        "description": "Sends the PDF URL as an email to the authenticated user's registered address (or an override email).",
+        "tags": ["Email"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["pdf_url"],
+                "properties": {
+                  "pdf_url": { "type": "string" },
+                  "email":   { "type": "string", "description": "Override email. Defaults to the user's registered email." },
+                  "subject": { "type": "string" },
+                  "message": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Email sent" },
+          "500": { "description": "Email delivery failed" }
+        }
+      }
+    },
+    "/api/resume/templates": {
+      "get": {
+        "operationId": "getTemplates",
+        "summary": "List available resume templates",
+        "description": "Returns metadata about available LaTeX resume templates. Pass the template ID to generate-pdf.",
+        "tags": ["Templates"],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "List of templates",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "templates": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id":          { "type": "string" },
+                          "name":        { "type": "string" },
+                          "description": { "type": "string" },
+                          "isDefault":   { "type": "boolean" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

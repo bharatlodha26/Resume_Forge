@@ -1,0 +1,132 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "resume.schema.json",
+  "title": "Resume",
+  "description": "Canonical resume JSON schema for ResumeForge",
+  "type": "object",
+  "required": ["header", "sections"],
+  "additionalProperties": false,
+  "properties": {
+    "header": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": false,
+      "properties": {
+        "name":  { "type": "string", "minLength": 1, "description": "Full name of the candidate" },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "location": { "type": "string" },
+        "linkedin": { "type": "string" },
+        "website": { "type": "string" }
+      }
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "$ref": "#/definitions/WorkSection" },
+          { "$ref": "#/definitions/AcademicSection" },
+          { "$ref": "#/definitions/SimpleSection" }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "WorkSection": {
+      "type": "object",
+      "required": ["id", "type", "title", "jobs"],
+      "additionalProperties": false,
+      "properties": {
+        "id":    { "type": "string" },
+        "type":  { "type": "string", "enum": ["work"] },
+        "title": { "type": "string" },
+        "jobs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "company", "role", "duration", "groups"],
+            "additionalProperties": false,
+            "properties": {
+              "id":       { "type": "string" },
+              "company":  { "type": "string" },
+              "role":     { "type": "string" },
+              "duration": { "type": "string" },
+              "groups": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["id", "label", "bullets"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "id":    { "type": "string" },
+                    "label": { "type": "string" },
+                    "bullets": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["id", "text"],
+                        "additionalProperties": false,
+                        "properties": {
+                          "id":   { "type": "string" },
+                          "text": { "type": "string" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "AcademicSection": {
+      "type": "object",
+      "required": ["id", "type", "title", "rows"],
+      "additionalProperties": false,
+      "properties": {
+        "id":           { "type": "string" },
+        "type":         { "type": "string", "enum": ["academic"] },
+        "title":        { "type": "string" },
+        "achievements": { "type": "string" },
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "year", "degree", "institution"],
+            "additionalProperties": false,
+            "properties": {
+              "id":          { "type": "string" },
+              "year":        { "type": "string" },
+              "degree":      { "type": "string" },
+              "institution": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "SimpleSection": {
+      "type": "object",
+      "required": ["id", "type", "title", "bullets"],
+      "additionalProperties": false,
+      "properties": {
+        "id":      { "type": "string" },
+        "type":    { "type": "string", "enum": ["simple"] },
+        "title":   { "type": "string" },
+        "label":   { "type": "string" },
+        "bullets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "text"],
+            "additionalProperties": false,
+            "properties": {
+              "id":   { "type": "string" },
+              "text": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

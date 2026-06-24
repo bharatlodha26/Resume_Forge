@@ -1,0 +1,328 @@
+{
+  "header": {
+    "name": "Bharat Lodha",
+    "email": "bharatl2016@email.iimcal.ac.in",
+    "phone": "+918585010096"
+  },
+  "sections": [
+    {
+      "id": "s-work-1",
+      "type": "work",
+      "title": "WORK EXPERIENCE",
+      "jobs": [
+        {
+          "id": "j-joveo",
+          "company": "Joveo Technologies",
+          "role": "Director, Product Management",
+          "duration": "Jun 2020 – Sep 2025",
+          "groups": [
+            {
+              "id": "g-ua",
+              "label": "Unified Analytics Product",
+              "bullets": [
+                {
+                  "id": "b-ua-1",
+                  "text": "Led, defined and executed a 3-year product vision and strategy for \"Unified Analytics\" (UA) product line"
+                },
+                {
+                  "id": "b-ua-2",
+                  "text": "Evolved \"UA\" into flagship, revenue-generating platform; Drove 100% adoption; Won 2025 HR Tech Award"
+                },
+                {
+                  "id": "b-ua-3",
+                  "text": "UA reduced manual reporting requests by 90% and data analysis time by 75%; attracted senior industry talent"
+                },
+                {
+                  "id": "b-ua-4",
+                  "text": "Standardized UA as demo layer; improved sales conversion by 18%; cited as primary competitive advantage"
+                },
+                {
+                  "id": "b-ua-5",
+                  "text": "Launched $2,500/month premium UA tier; introduced value-based pricing; created new SaaS revenue stream"
+                }
+              ]
+            },
+            {
+              "id": "g-ai",
+              "label": "AI/ML Products",
+              "bullets": [
+                {
+                  "id": "b-ai-1",
+                  "text": "Defined and drove company-wide Generative & Predictive AI strategy; Shipped 6 applied AI Products"
+                },
+                {
+                  "id": "b-ai-2",
+                  "text": "Built AI-powered Relevance Engine; automated 80% candidate screening; improved match accuracy by 30%"
+                },
+                {
+                  "id": "b-ai-3",
+                  "text": "Reduced planning time by 90% from days to under 30 minutes by launching a Predictive AI Media Planner"
+                },
+                {
+                  "id": "b-ai-4",
+                  "text": "Built \"Analytics Copilot\" using GenAI, instituted rigorous eval framework for production-ready accuracy"
+                },
+                {
+                  "id": "b-ai-5",
+                  "text": "Partnered with Data Science team on 5+ production machine learning models; defined validation framework (including back-testing, confidence scoring, and accuracy thresholds), feature requirements and success metrics"
+                },
+                {
+                  "id": "b-ai-6",
+                  "text": "Vibe Coded & deployed 20K line sales demo generator; Reduced demo preparation time by 95% to few mins"
+                }
+              ]
+            },
+            {
+              "id": "g-pph",
+              "label": "PPH Business",
+              "bullets": [
+                {
+                  "id": "b-pph-1",
+                  "text": "Started & scaled \"PPH\" business line from scratch; owned full P&L; expanded margins from 27% to 56%"
+                },
+                {
+                  "id": "b-pph-2",
+                  "text": "Built & scaled \"JAAS\" platform to 2 Mn$ ARR; Improved application conversion by 100% on \"MOJO Apply\""
+                }
+              ]
+            },
+            {
+              "id": "g-pl",
+              "label": "Product Leadership",
+              "bullets": [
+                {
+                  "id": "b-pl-1",
+                  "text": "Delivered sustained outcomes on portfolio of 4 product lines/12 products for 3 yrs each with a team of 3-7"
+                },
+                {
+                  "id": "b-pl-2",
+                  "text": "Fostered culture of excellence & growth in team by establishing psychologically safe, learning-first environment"
+                },
+                {
+                  "id": "b-pl-3",
+                  "text": "Institutionalized product operations: Competency Framework, Hiring Process, Release Management & others"
+                },
+                {
+                  "id": "b-pl-4",
+                  "text": "Led end-to-end vendor strategy for 6 tools ($200K+): build-vs-buy decision, POCs, negotiation & integration"
+                },
+                {
+                  "id": "b-pl-5",
+                  "text": "Negotiated 80% cost reduction for \"Looker\" contract managing complete vendor evaluation and integration"
+                },
+                {
+                  "id": "b-pl-6",
+                  "text": "Recognized as primary product partner by leadership and cross-functional teams for strategic problem-solving"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "j-arcesium",
+          "company": "Arcesium India",
+          "role": "Product Lead",
+          "duration": "Nov 2019 – May 2020",
+          "groups": [
+            {
+              "id": "g-arc-pm",
+              "label": "Lead PM",
+              "bullets": [
+                {
+                  "id": "b-arc-1",
+                  "text": "Led transformation of Fund Accounting platform, automating workflows; Reduced user clicks from 40+ to 1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "j-ar",
+          "company": "AnandRathi Wealth Management",
+          "role": "Head of Product",
+          "duration": "Nov 2016 – Oct 2019",
+          "groups": [
+            {
+              "id": "g-ar-pl",
+              "label": "Product Leadership",
+              "bullets": [
+                {
+                  "id": "b-ar-1",
+                  "text": "Spearheaded product vision, strategy, execution & team of 3 to successfully scale 3 product lines (8 products)"
+                },
+                {
+                  "id": "b-ar-2",
+                  "text": "Drove the digital transformation behind 4x AUM growth (Rs. 30Cr to Rs. 120Cr); scaled sales partners to 23"
+                },
+                {
+                  "id": "b-ar-3",
+                  "text": "Built & led a high-performing product team, fostering a culture of ownership to drive the end-to-end lifecycle"
+                }
+              ]
+            },
+            {
+              "id": "g-ar-gi",
+              "label": "AR Group Initiatives",
+              "bullets": [
+                {
+                  "id": "b-ar-4",
+                  "text": "Managed a Rs. 3+ Crore annual IT budget, optimizing resource allocation & vendor strategies to maximize ROI"
+                },
+                {
+                  "id": "b-ar-5",
+                  "text": "Owned group-level tech roadmap, aligned 15 cross-functional teams; drove cohesive tech transformation"
+                },
+                {
+                  "id": "b-ar-6",
+                  "text": "Established analytics function as centre of excellence from scratch; drove all business insights for 3+ years"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "j-bcg",
+          "company": "The Boston Consulting Group",
+          "role": "Senior | Summer Associate",
+          "duration": "Jun – Sep 2016 | Apr – Jun 2015",
+          "groups": [
+            {
+              "id": "g-bcg-mc",
+              "label": "Management Consulting",
+              "bullets": [
+                {
+                  "id": "b-bcg-1",
+                  "text": "Ran hypothesis-driven diagnostic for mfg. cost reduction on a Rs. 2000+ Crore Indian mass media giant"
+                },
+                {
+                  "id": "b-bcg-2",
+                  "text": "Rs. 30 Crore cost reduction opportunity identified on Rs. 250 Crore mfg. cost base spread across 30+ locations"
+                },
+                {
+                  "id": "b-bcg-3",
+                  "text": "Worked in team of 6 to turnaround Rs. 100Crore+(revenue) auto parts company to make it EBITDA neutral"
+                },
+                {
+                  "id": "b-bcg-4",
+                  "text": "25% savings proposed on Rs. 2 Crore cost category using tech & commercial levers; Awarded Job Offer"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "j-tp",
+          "company": "TechPartners",
+          "role": "Co-Founder",
+          "duration": "Sep 2014 – Mar 2016",
+          "groups": [
+            {
+              "id": "g-tp-ach",
+              "label": "Achievement",
+              "bullets": [
+                {
+                  "id": "b-tp-1",
+                  "text": "Co-founded start-up for building software teams for SMEs; Grossed Rs. 7+ lacs in 18 months from 2 clients"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "j-ms",
+          "company": "Microsoft IDC",
+          "role": "Software Engineer",
+          "duration": "Jun 2011 – May 2014",
+          "groups": [
+            {
+              "id": "g-ms-sum",
+              "label": "Summary",
+              "bullets": [
+                {
+                  "id": "b-ms-1",
+                  "text": "Spearheaded a team of 24 to plan test pass schedules and define exit criteria for code coverage(cc) efforts"
+                },
+                {
+                  "id": "b-ms-2",
+                  "text": "Subject matter expert and SPOC for the 80-membered HVR team for data consistency & code coverage"
+                }
+              ]
+            },
+            {
+              "id": "g-ms-dc",
+              "label": "Data Consistency Project",
+              "bullets": [
+                {
+                  "id": "b-ms-3",
+                  "text": "Innovated novel bug reproduction method; increased the reproduction rate from 4% to 100%; saved Rs. 6L p.a."
+                },
+                {
+                  "id": "b-ms-4",
+                  "text": "Saved Rs. 2.5 lacs p.a. by failure analysis automation and Rs. 1.5 lacs p.a. by optimizing the \"VHDSync\" tool"
+                },
+                {
+                  "id": "b-ms-5",
+                  "text": "Mentored the azure replication team for all data consistency testing; Promoted within 1.5 years of joining"
+                }
+              ]
+            },
+            {
+              "id": "g-ms-cc",
+              "label": "CC and HVR Setup Tool",
+              "bullets": [
+                {
+                  "id": "b-ms-6",
+                  "text": "Worked in a self-directed team to improve cc process; conceptualized a one-click tool used by 120 users"
+                },
+                {
+                  "id": "b-ms-7",
+                  "text": "Collected requirements, defined use cases; designed, developed, tested & maintained the cc & setup tool"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s-academic",
+      "type": "academic",
+      "title": "ACADEMIC QUALIFICATIONS",
+      "rows": [
+        {
+          "id": "r-mba",
+          "year": "2016",
+          "degree": "PGDM / MBA",
+          "institution": "IIM Calcutta"
+        },
+        {
+          "id": "r-btech",
+          "year": "2011",
+          "degree": "B. Tech, Computer Science",
+          "institution": "IIT Guwahati"
+        }
+      ],
+      "achievements": "99.92 percentile (AIR 139) in CAT (2013) | 99.56 percentile (AIR 1071) in IIT-JEE (2007) | 99.88 percentile (AIR 799) in AIEEE (2007) | 85.2% in class XII | 87.4% in class X | 17th rank in NTSE - 2004 (First Level)"
+    },
+    {
+      "id": "s-extra",
+      "type": "simple",
+      "title": "EXTRA CURRICULARS",
+      "label": "Achievements",
+      "bullets": [
+        {
+          "id": "b-ec-1",
+          "text": "Organized 10 product meetups in Bangalore (2024-25) building local PM community & thought leadership"
+        },
+        {
+          "id": "b-ec-2",
+          "text": "Invited as panellist at XLRI Jamshedpur's Product Conclave in 2025 discussing future of product management"
+        },
+        {
+          "id": "b-ec-3",
+          "text": "Built personal brand reaching 23k+ professionals, driving 130k+ impressions in 2025 via LinkedIn & podcast"
+        }
+      ]
+    }
+  ]
+}

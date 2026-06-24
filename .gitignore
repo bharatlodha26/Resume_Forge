@@ -1,0 +1,9 @@
+node_modules/
+.env
+dist/
+server/latex/
+server/data/resumes/
+server/data/users.json
+server/data/oauth_codes.json
+server/data/access_tokens.json
+.DS_Store
