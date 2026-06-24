@@ -21,8 +21,12 @@ const ALLOWED_ORIGINS = [
   'http://localhost:5173',
   'http://localhost:3001',
   'https://chatgpt.com',
-  'https://chat.openai.com'
+  'https://chat.openai.com',
+  'https://resume-forge.bharatlodha.com'
 ];
+if (process.env.FRONTEND_URL) {
+  ALLOWED_ORIGINS.push(process.env.FRONTEND_URL);
+}
 app.use(cors({
   origin: (origin, cb) => {
     if (!origin || ALLOWED_ORIGINS.includes(origin)) return cb(null, true);

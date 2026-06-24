@@ -30,10 +30,11 @@ export default function LoginPage() {
 
     setLoading(true);
     try {
+      const API_BASE = import.meta.env.VITE_API_URL || '';
       const endpoint = mode === 'login' ? '/api/auth/login' : '/api/auth/signup';
       const body = { email, password, ...oauthParams };
 
-      const res = await fetch(endpoint, {
+      const res = await fetch(`${API_BASE}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)

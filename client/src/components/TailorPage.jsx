@@ -79,7 +79,8 @@ export default function TailorPage() {
     setError(null);
     setSelectedIds(null);
     try {
-      const res = await fetch('/api/tailor', {
+      const API_BASE = import.meta.env.VITE_API_URL || '';
+      const res = await fetch(`${API_BASE}/api/tailor`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ resume, jd, apiKey: apiKey || undefined })

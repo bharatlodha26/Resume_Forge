@@ -16,7 +16,8 @@ export function ResumeProvider({ children }) {
   const [savingClassFile, setSavingClassFile] = useState(false);
 
   useEffect(() => {
-    fetch('/api/resume')
+    const API_BASE = import.meta.env.VITE_API_URL || '';
+    fetch(`${API_BASE}/api/resume`)
       .then(r => r.json())
       .then(data => { setResume(data); setLoading(false); })
       .catch(() => setLoading(false));
@@ -25,7 +26,8 @@ export function ResumeProvider({ children }) {
   const saveResume = useCallback(async (data) => {
     setSaving(true);
     try {
-      await fetch('/api/resume', {
+      const API_BASE = import.meta.env.VITE_API_URL || '';
+      await fetch(`${API_BASE}/api/resume`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
@@ -49,14 +51,15 @@ export function ResumeProvider({ children }) {
     setCompileError(null);
     setPdfUrl(null);
     try {
-      const res = await fetch('/api/compile', {
+      const API_BASE = import.meta.env.VITE_API_URL || '';
+      const res = await fetch(`${API_BASE}/api/compile`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ resume: resumeData || resume })
       });
       const data = await res.json();
       if (data.success) {
-        setPdfUrl(data.pdfUrl + '?t=' + Date.now());
+        setPdfUrl(API_BASE + data.pdfUrl + '?t=' + Date.now());
       } else {
         setCompileError(data.error || 'Compilation failed');
       }
@@ -70,7 +73,8 @@ export function ResumeProvider({ children }) {
   const fetchClassFile = useCallback(async () => {
     setLoadingClassFile(true);
     try {
-      const res = await fetch('/api/resume/class');
+      const API_BASE = import.meta.env.VITE_API_URL || '';
+      const res = await fetch(`${API_BASE}/api/resume/class`);
       const data = await res.json();
       setClassFileContent(data.content || '');
     } catch (err) {
@@ -83,7 +87,8 @@ export function ResumeProvider({ children }) {
   const saveClassFile = useCallback(async (content) => {
     setSavingClassFile(true);
     try {
-      const res = await fetch('/api/resume/class', {
+      const API_BASE = import.meta.env.VITE_API_URL || '';
+      const res = await fetch(`${API_BASE}/api/resume/class`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ content })
