@@ -6,14 +6,26 @@ import TailorPage from './components/TailorPage';
 import SettingsPage from './components/SettingsPage';
 import LoginPage from './components/LoginPage';
 import PdfPreview from './components/PdfPreview';
+import PrivacyPage from './components/PrivacyPage';
+import TermsPage from './components/TermsPage';
+import SupportPage from './components/SupportPage';
 
-// Simple client-side router: show LoginPage for /login path
+// Simple client-side router
 function AppContent() {
   const { activeTab } = useResume();
-  const isLoginPath = window.location.pathname === '/login';
+  const path = window.location.pathname;
 
-  if (isLoginPath) {
+  if (path === '/login') {
     return <LoginPage />;
+  }
+  if (path === '/privacy') {
+    return <PrivacyPage />;
+  }
+  if (path === '/terms') {
+    return <TermsPage />;
+  }
+  if (path === '/support') {
+    return <SupportPage />;
   }
 
   const renderContent = () => {

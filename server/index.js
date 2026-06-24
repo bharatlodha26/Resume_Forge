@@ -15,7 +15,7 @@ const { compilePdf } = require('./routes/compile');
 const app  = express();
 const PORT = process.env.PORT || 3001;
 
-// ── CORS ─────────────────────────────────────────────────────────────────────
+// CORS
 // Allow the React dev server and ChatGPT to reach this API.
 const ALLOWED_ORIGINS = [
   'http://localhost:5173',
@@ -39,12 +39,12 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// ── Static: serve compiled PDFs ───────────────────────────────────────────────
+// Static: serve compiled PDFs
 const latexDir = path.join(__dirname, 'latex');
 if (!fs.existsSync(latexDir)) fs.mkdirSync(latexDir, { recursive: true });
 app.use('/pdf', express.static(latexDir));
 
-// ── API Routes ────────────────────────────────────────────────────────────────
+// API Routes
 app.use('/api/auth',               authRouter);
 app.use('/api/resume',             resumeRouter);
 app.use('/api/compile',            compileRouter);   // legacy (React frontend)
@@ -53,10 +53,10 @@ app.use('/api/resume/email',       emailRouter);
 app.use('/api/resume/templates',   templatesRouter);
 app.use('/api/tailor',             tailorRouter);
 
-// ── Health ────────────────────────────────────────────────────────────────────
+// Health
 app.get('/api/health', (req, res) => res.json({ status: 'ok', version: '2.0.0' }));
 
-// ── OAuth 2.1 Protected Resource Discovery (for ChatGPT Apps SDK) ─────────────
+// OAuth 2.1 Protected Resource Discovery (for ChatGPT Apps SDK)
 app.get('/.well-known/oauth-protected-resource', (req, res) => {
   const backendUrl = process.env.BACKEND_URL || 'https://resume-forge-4lsw.onrender.com';
   res.json({
@@ -66,7 +66,7 @@ app.get('/.well-known/oauth-protected-resource', (req, res) => {
   });
 });
 
-// ── OpenAPI spec (for ChatGPT Action setup) ───────────────────────────────────
+// OpenAPI spec (for ChatGPT Action setup)
 const openApiPath = path.join(__dirname, 'openapi.json');
 app.get('/openapi.json', (req, res) => {
   if (fs.existsSync(openApiPath)) {
@@ -77,7 +77,7 @@ app.get('/openapi.json', (req, res) => {
   }
 });
 
-// ── MCP Server Setup ──────────────────────────────────────────────────────────
+// MCP Server Setup
 import('./mcp.mjs')
   .then(({ setupMcp }) => {
     setupMcp(app);
@@ -88,7 +88,8 @@ import('./mcp.mjs')
 
 app.listen(PORT, () => {
   console.log(`ResumeForge API v2.0 running on http://localhost:${PORT}`);
-  console.log(`  → Health:    http://localhost:${PORT}/api/health`);
-  console.log(`  → OpenAPI:   http://localhost:${PORT}/openapi.json`);
-  console.log(`  → OAuth:     http://localhost:${PORT}/api/auth/authorize`);
+  console.log(`  -> Health:    http://localhost:${PORT}/api/health`);
+  console.log(`  -> OpenAPI:   http://localhost:${PORT}/openapi.json`);
+  console.log(`  -> OAuth:     http://localhost:${PORT}/api/auth/authorize`);
+  console.log(`  -> MCP:       http://localhost:${PORT}/mcp`);
 });
