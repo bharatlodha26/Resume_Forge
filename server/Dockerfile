@@ -1,7 +1,13 @@
 FROM node:20-bullseye
 
-# Install LaTeX and the required fonts/packages
-RUN apt-get update && apt-get install -y \
+# Install LaTeX and the required fonts/packages (with retry and missing-fix for large downloads)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends --fix-missing \
+    texlive-latex-base \
+    texlive-fonts-recommended \
+    texlive-fonts-extra \
+    texlive-latex-extra \
+    || apt-get install -y --no-install-recommends --fix-missing \
     texlive-latex-base \
     texlive-fonts-recommended \
     texlive-fonts-extra \
