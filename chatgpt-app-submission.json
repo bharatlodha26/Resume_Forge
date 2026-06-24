@@ -1,0 +1,121 @@
+{
+  "$schema": "https://developers.openai.com/apps-sdk/schemas/chatgpt-app-submission.v1.json",
+  "schema_version": 1,
+  "app_info": {
+    "display_name": "ResumeForge",
+    "subtitle": "Professional LaTeX Resumes",
+    "description": "Create, customize, compile, and email professional, ATS-optimized LaTeX resumes. Connects securely to your ResumeForge account to manage your master resume data, instantly preview beautifully rendered templates, and send copies directly to your inbox.",
+    "category": "PRODUCTIVITY"
+  },
+  "tools": {
+    "get_master_resume": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "This tool is read-only because it simply fetches the stored master resume data from the user's database record without mutating any server state.",
+        "open_world_justification": "This tool is not open world because it does not communicate with external systems or network targets; it only queries the local ResumeForge database.",
+        "destructive_justification": "This tool is not destructive because it does not perform any update, deletion, or overwrite operations on any user data."
+      }
+    },
+    "save_master_resume": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "This tool is not read-only because it updates and overwrites the user's master resume JSON data stored in the database.",
+        "open_world_justification": "This tool is not open world because it only saves data to the local ResumeForge database and does not connect to external network services.",
+        "destructive_justification": "This tool is not destructive because it does not delete user accounts, reset data, or destroy system state, although it performs updates."
+      }
+    },
+    "generate_pdf": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "This tool is not read-only because it runs a compilation task on the server that generates new temporary files (PDFs) on the disk.",
+        "open_world_justification": "This tool is not open world because all LaTeX compilation and PDF rendering are completed locally on our server without accessing any external APIs or third-party web services.",
+        "destructive_justification": "This tool is not destructive because it generates new preview PDFs and does not overwrite, delete, or modify any user database records."
+      }
+    },
+    "email_resume": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "This tool is not read-only because it triggers an outgoing operation (sending an email via SMTP) rather than just reading data.",
+        "open_world_justification": "This tool is open world because it sends an email message to the user's external email address, routing traffic over the public internet to third-party mail servers.",
+        "destructive_justification": "This tool is not destructive because it only transmits an email message and does not delete or overwrite any user records or system data."
+      }
+    },
+    "get_templates": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "This tool is read-only because it returns a static list of supported resume templates and their metadata.",
+        "open_world_justification": "This tool is not open world because it reads template metadata from local static configuration and does not access external network targets.",
+        "destructive_justification": "This tool is not destructive because it is a read-only metadata retrieval and does not modify any state or database entries."
+      }
+    }
+  },
+  "test_cases": [
+    {
+      "description": "Verify that the assistant can retrieve the list of available LaTeX templates.",
+      "user_prompt": "Show me the available resume templates.",
+      "tools_triggered": "get_templates",
+      "expected_output": "Should list templates including 'executive' with their names and descriptions."
+    },
+    {
+      "description": "Verify that the assistant can successfully retrieve the authenticated user's master resume.",
+      "user_prompt": "Load my master resume details.",
+      "tools_triggered": "get_master_resume",
+      "expected_output": "Should display the user's name, contact details, work experience, and educational background from the master resume."
+    },
+    {
+      "description": "Verify that the assistant can update the master resume with new work experience information.",
+      "user_prompt": "Add a new work experience entry to my resume: Lead Software Engineer at Google from May 2024 to Present.",
+      "tools_triggered": "save_master_resume",
+      "expected_output": "Should confirm that the master resume has been updated and saved successfully."
+    },
+    {
+      "description": "Verify that the assistant can generate a compiled PDF preview from the master resume data.",
+      "user_prompt": "Compile my resume to a PDF using the executive template.",
+      "tools_triggered": "generate_pdf",
+      "expected_output": "Should return a download link for the compiled PDF file."
+    },
+    {
+      "description": "Verify that the assistant can send the compiled PDF to the user's registered email address.",
+      "user_prompt": "Send the generated PDF /pdf/job-123/main.pdf to my email.",
+      "tools_triggered": "email_resume",
+      "expected_output": "Should confirm that the resume has been successfully sent to the user's inbox."
+    }
+  ],
+  "negative_test_cases": [
+    {
+      "description": "Verify that retrieving the master resume fails gracefully when the user's session is expired or not authenticated.",
+      "user_prompt": "Get my master resume.",
+      "expected_output": "Should prompt the user to log in or authorize the app, displaying an authentication error message."
+    },
+    {
+      "description": "Verify that saving the master resume fails when the payload has an invalid structure that violates the JSON Schema.",
+      "user_prompt": "Update my master resume but set the header to null.",
+      "expected_output": "Should display validation errors and refuse to overwrite the master resume data."
+    },
+    {
+      "description": "Verify that emailing the resume fails when the PDF URL is invalid, empty, or not found on the server.",
+      "user_prompt": "Email the resume /pdf/non-existent-id/main.pdf.",
+      "expected_output": "Should display a descriptive error message indicating that the PDF file was not found or could not be sent."
+    }
+  ]
+}

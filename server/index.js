@@ -56,6 +56,16 @@ app.use('/api/tailor',             tailorRouter);
 // ── Health ────────────────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => res.json({ status: 'ok', version: '2.0.0' }));
 
+// ── OAuth 2.1 Protected Resource Discovery (for ChatGPT Apps SDK) ─────────────
+app.get('/.well-known/oauth-protected-resource', (req, res) => {
+  const backendUrl = process.env.BACKEND_URL || 'https://resume-forge-4lsw.onrender.com';
+  res.json({
+    resource: backendUrl,
+    authorization_servers: [backendUrl],
+    scopes_supported: ['resume:read', 'resume:write', 'pdf:generate', 'email:send']
+  });
+});
+
 // ── OpenAPI spec (for ChatGPT Action setup) ───────────────────────────────────
 const openApiPath = path.join(__dirname, 'openapi.json');
 app.get('/openapi.json', (req, res) => {
@@ -66,6 +76,15 @@ app.get('/openapi.json', (req, res) => {
     res.status(404).json({ error: 'OpenAPI spec not found' });
   }
 });
+
+// ── MCP Server Setup ──────────────────────────────────────────────────────────
+import('./mcp.mjs')
+  .then(({ setupMcp }) => {
+    setupMcp(app);
+  })
+  .catch(err => {
+    console.error('Failed to load MCP server:', err);
+  });
 
 app.listen(PORT, () => {
   console.log(`ResumeForge API v2.0 running on http://localhost:${PORT}`);
